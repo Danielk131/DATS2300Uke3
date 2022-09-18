@@ -1,3 +1,5 @@
+import eksempelklasser.Komperator;
+
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.Random;
@@ -269,6 +271,27 @@ public class Tabell {
         }
         return maks;
     }
+    public static <T> int maks(T[] a, int fra, int til, Komperator.Komparator<? super T> c)
+    {
+        fratilKontroll(a.length,fra,til);
+
+        if (fra == til) throw new NoSuchElementException
+                ("fra(" + fra + ") = til(" + til + ") - tomt tabellintervall!");
+
+        int m = fra;                // indeks til største verdi
+        T maksverdi = a[fra];       // største verdi
+
+        for (int i = fra + 1; i < til; i++)   // går gjennom intervallet
+        {
+            if (c.compare(a[i],maksverdi) > 0)  // bruker komparatoren
+            {
+                maksverdi = a[i];     // største verdi oppdateres
+                m = i;                // indeks til største verdi oppdateres
+            }
+        }
+        return m;                 // posisjonen til største verdi
+
+    }  // maks
 
     public static int maks(int[] a)  // bruker hele tabellen
     {
@@ -324,6 +347,20 @@ public class Tabell {
             a[j + 1] = verdi;      // j + 1 er rett sortert plass
         }
     }
+
+    public static <T> void innsettingssortering(T[] a, Komperator.Komparator<? super T> c)
+    {
+        for (int i = 1; i < a.length; i++)  // starter med i = 1
+        {
+            T verdi = a[i];        // verdi er et tabellelemnet
+            int  j = i - 1;        // j er en indeks
+
+            // sammenligner og forskyver:
+            for (; j >= 0 && c.compare(verdi,a[j]) < 0 ; j--) a[j+1] = a[j];
+
+            a[j + 1] = verdi;      // j + 1 er rett sortert plass
+        }
+    }
     public static void skriv(Object[] a, int fra, int til){
         String ut="";
         for (int i = 0; i<til; i++) {
@@ -367,5 +404,9 @@ public class Tabell {
             bytt(a,k,i);             // bytter om
         }
         return a;  // tabellen med permutasjonen returneres
+    }
+
+    public static <T> int maks(T[] a, Komperator.Komparator<? super T> c){
+       return maks(a, 0, a.length, c);
     }
 }
