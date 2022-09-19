@@ -1,6 +1,6 @@
 import eksempelklasser.*;
-
 import java.util.Arrays;
+import java.util.Comparator;
 
 public class Main {
     public static void main(String[] args) {
@@ -127,6 +127,14 @@ public class Main {
                 }
             }
 
+            class etternavnKomperator implements Komperator.Komparator<Person>{
+
+                @Override
+                public int compare(Person p1, Person p2) {
+                    return p1.etternavn().compareTo(p2.etternavn());
+                }
+            }
+
         class studenKomperator implements Komperator.Komparator<Student>
         {
             public int compare(Student s1, Student s2)        // to personer
@@ -144,7 +152,7 @@ public class Main {
             }
         }
 
-            Komperator.Komparator<Person> c = new FornavnKomparator();   // en instans av klassen
+            /*Komperator.Komparator<Person> c = (Komperator.Komparator<Person>) new FornavnKomparator();   // en instans av klassen
             Tabell.innsettingssortering(p, c);                // se Programkode 1.4.6 b)
 
             System.out.println(Arrays.toString(p));           // Utskrift av tabellen p
@@ -155,6 +163,38 @@ public class Main {
 
         Tabell.innsettingssortering(s, (s1, s2) -> s1.studium().compareTo(s2.studium()));
         System.out.println(Arrays.toString(s));
-        }
+
+        Double[] d = {5.7,3.14,7.12,3.9,6.5,7.1,7.11};
+        Tabell.innsettingssortering(d, Komperator.Komparator.naturligOrden());
+        System.out.println(Arrays.toString(d));
+        Tabell.innsettingssortering(d, Komperator.Komparator.omvendtOrden());
+        System.out.println(Arrays.toString(d));
+
+        Boolean[] b = {false, true, true, false, false, true, false, true};
+        Tabell.innsettingssortering(b, Komperator.Komparator.naturligOrden());
+        System.out.println(Arrays.toString(b));
+
+
+        Tabell.innsettingssortering(p, Komperator.Komparator.orden(Person::etternavn));
+        System.out.println(Arrays.toString(p));
+
+        String[] s2 = {"Lars","Anders","Bodil","Kari","Per","Berit"};
+
+
+
+        Tabell.innsettingssortering(s2, (x,y) -> y.length()-x.length());
+        Tabell.innsettingssortering(s2, Komperator.Komparator.orden(x -> -x.length()));
+        System.out.println(Arrays.toString(s2));*/
+
+        String [] str = {"21","18","8","13","20","6","16","25","3","10"};
+        Tabell.innsettingssortering(str, Komperator.Komparator.orden(String::length).deretter(x->x));
+        System.out.println(Arrays.toString(str));
+
+
+        String[] st = {"Sohil","Per","Thanh","Ann","Kari","Jon"};       // String-tabell
+        Comparator<String> c =  Comparator.comparing(String::length);  // etter lengde
+        Tabell.innsettingssortering(st, c.thenComparing(x -> x));       // vanlig orden
+        System.out.println(Arrays.toString(s));                        // skriver ut
+    }
     }
 
