@@ -323,14 +323,13 @@ public class Tabell {
             }
         return m;
     }
-    public static <T> int maks(T[] a, Comparator<? super T> c)
-    {
+
+    public static <T> int maks(T[] a, Comparator<? super T> c) {
         return maks(a, 0, a.length, c);  // kaller metoden under
     }
 
-    public static <T> int maks(T[] a, int fra, int til, Comparator<? super T> c)
-    {
-        fratilKontroll(a.length,fra,til);
+    public static <T> int maks(T[] a, int fra, int til, Comparator<? super T> c) {
+        fratilKontroll(a.length, fra, til);
 
         if (fra == til) throw new NoSuchElementException
                 ("fra(" + fra + ") = til(" + til + ") - tomt tabellintervall!");
@@ -340,7 +339,7 @@ public class Tabell {
 
         for (int i = fra + 1; i < til; i++)   // går gjennom intervallet
         {
-            if (c.compare(a[i],maksverdi) > 0)  // bruker komparatoren
+            if (c.compare(a[i], maksverdi) > 0)  // bruker komparatoren
             {
                 maksverdi = a[i];     // største verdi oppdateres
                 m = i;                // indeks til største verdi oppdateres
@@ -429,4 +428,118 @@ public class Tabell {
             a[j + 1] = verdi;      // j + 1 er rett sortert plass
         }
     }
+
+    public static int rekursivA(int n)           // n må være et ikke-negativt tall
+    {
+        if (n == 0) return 1;              // a0 = 1
+        else if (n == 1) return 2;         // a1 = 2
+        else return 2 * rekursivA(n - 1) + 3 * rekursivA(n - 2);   // to rekursive kall
+    }
+
+    public static int iterativA(int n) {
+        int sum2 = 1;
+        int sum1 = 2;
+        int temp;
+        if (n == 0) {
+            return 1;
+        } else if (n == 1) {
+            return 2;
+        } else {
+            for (int i = 2; i <= n; i++) {
+                if (i == n) {
+                    int sum = 2 * sum1 + 3 * sum2;
+                    return sum;
+                }
+                temp = sum1;
+                sum1 = 2 * sum1 + 3 * sum2;
+                sum2 = temp;
+            }
+        }
+        return -1;
+    }
+
+    public static int rekursivTverrsum(int n)              // n må være >= 0
+    {
+        if (n < 10) return n;                        // kun ett siffer
+        else return rekursivTverrsum(n / 10) + (n % 10);     // metoden kalles
+    }
+
+    public static int iterativTverrsum(int n) {
+        int tverrsum = 0;
+        while (n > 10) {
+            tverrsum += n % 10;
+            n = n / 10;
+        }
+        return tverrsum + n;
+    }
+
+    public static int sifferrot(int n) {
+        while (n > 10) {
+            n = iterativTverrsum(n);
+            sifferrot(n);
+        }
+        return n;
+    }
+
+    public static int kvadratRekursiv (int n){
+        if (n==0){
+            return n;
+        }
+           else
+               return n*n+kvadratRekursiv(n-1);
+    }
+
+    public static int sum(int k, int n){
+        if(k==n){
+            return k;
+        }
+        int m = (k+n)/2;
+        return sum(k,m)+sum(m+1,n);
+    }
+
+    public static int størsteRekursiv(int[] a, int v, int h){
+        if (v==h){
+            return v;
+        }
+        int m = (v+h)/2;
+        int mv = størsteRekursiv(a, v, m);
+        int mh = størsteRekursiv(a, m+1, h);
+
+        return a[mv]>a[mh] ? mv : mh;
+    }
+
+    public static int rekursivFakultet(int n){
+        if (n==1){
+            return n;
+        }
+        return n*rekursivFakultet(n-1);
+    }
+
+    public static int fib(int n)         // det n-te Fibonacci-tallet
+    {
+        if (n <= 1) return n;              // fib(0) = 0, fib(1) = 1
+        else return fib(n - 1) + fib(n - 2);   // summen av de to foregående
+    }
+    public static int tverrsum(int n)
+    {
+        System.out.println("tverrsum(" + n + ") starter!");
+        int sum = (n < 10) ? n : tverrsum(n / 10) + (n % 10);
+        System.out.println("tverrsum(" + n + ") er ferdig!");
+        return sum;
+    }
+
+    public static int euklid(int a, int b)
+    {
+        System.out.println("euklid(" + a + "," + b + ") starter!");
+        if (b == 0)
+        {
+            System.out.println("euklid(" + a + "," + b + ") er ferdig!");
+            return a;
+        }
+        int r = a % b;            // r er resten
+        int k = euklid(b,r);       // rekursivt kall
+        System.out.println("euklid(" + a + "," + b + ") er ferdig!");
+        return k;
+    }
 }
+

@@ -185,7 +185,7 @@ public class Main {
         Tabell.innsettingssortering(s2, (x,y) -> y.length()-x.length());
         Tabell.innsettingssortering(s2, Komperator.Komparator.orden(x -> -x.length()));
         System.out.println(Arrays.toString(s2));*/
-
+/*
         String [] str = {"21","18","8","13","20","6","16","25","3","10"};
         Tabell.innsettingssortering(str, Komperator.Komparator.orden(String::length).deretter(x->x));
         System.out.println(Arrays.toString(str));
@@ -194,7 +194,28 @@ public class Main {
         String[] st = {"Sohil","Per","Thanh","Ann","Kari","Jon"};       // String-tabell
         Comparator<String> c =  Comparator.comparing(String::length);  // etter lengde
         Tabell.innsettingssortering(st, c.thenComparing(x -> x));       // vanlig orden
-        System.out.println(Arrays.toString(s));                        // skriver ut
-    }
-    }
+        System.out.println(Arrays.toString(s));
+        // skriver ut
 
+
+        System.out.println( "Iterativ : " + Tabell.iterativA(10));
+        System.out.println("Rekursiv : " + Tabell.rekursivA(10));
+
+        System.out.println("Iterativ " + Tabell.iterativTverrsum(4231));
+        System.out.println("Rekursiv " + Tabell.rekursivTverrsum(4231));
+
+        System.out.println("Sifferrot " + Tabell.sifferrot(956847));
+        System.out.println("Kvadratrekursiv " +Tabell.kvadratRekursiv(5));
+
+        System.out.println("SPlitt og herks : " + Tabell.sum(1, 5));
+
+        int[] a = {1, 2, 6, 3, 7, 9, 3};
+        System.out.println(Tabell.størsteRekursiv(a, 0, 2));
+        int iterativ = Tabell.størsteRekursiv(a, 0, 3);*/
+
+        int svar = Tabell.rekursivFakultet(5);
+        System.out.println(Tabell.rekursivFakultet(5));
+
+        System.out.println(Tabell.euklid(1, 5));
+        }
+    }
