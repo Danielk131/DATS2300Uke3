@@ -92,6 +92,12 @@ public class Tabell {
         }
     }
 
+    public static <T> void utvalgssortering(T[] a, Comparator<? super T> c) {
+        for (int i = 0; i < a.length; i++) {
+            bytt(a, i, min(a, i, a.length, c));
+        }
+    }
+
     public static int usortertsøk(int[] a, int verdi)  // tabell og søkeverdi
     {
         int sist = a.length - 1;
@@ -137,30 +143,31 @@ public class Tabell {
             return -(i + 1);
     }
 
-    public static int binærsøk(int[] a, int fra, int til, int verdi) {
+    public static <T> int binærsøk(T[] a, int fra, int til, T verdi, Comparator<? super T> c) {
         Tabell.fratilKontroll(a.length, fra, til);  // se Programkode 1.2.3 a)
         int v = fra, h = til - 1;  // v og h er intervallets endepunkter
 
         while (v <= h)    // fortsetter så lenge som a[v:h] ikke er tom
         {
             int m = (v + h) / 2;      // heltallsdivisjon - finner midten
-            int midtverdi = a[m];   // hjelpevariabel for midtverdien
+            T midtverdi = a[m];   // hjelpevariabel for midtverdien
 
             if (verdi == midtverdi) return m;          // funnet
-            else if (verdi > midtverdi) v = m + 1;     // verdi i a[m+1:h]
-            else h = m - 1;                           // verdi i a[v:m-1]
+            else if (c.compare(verdi, midtverdi) > 0) {
+                v = m + 1;     // verdi i a[m+1:h]
+            } else h = m - 1;                           // verdi i a[v:m-1]
         }
 
         return -(v + 1);    // ikke funnet, v er relativt innsettingspunkt
     }
 
-    public static int binærsøk(int[] a, int verdi)  // søker i hele a
+    public static <T> int binærsøk(T[] a, T verdi, Comparator<? super T> c)  // søker i hele a
     {
-        return binærsøk(a, 0, a.length, verdi);  // bruker metoden over
+        return binærsøk(a, 0, a.length, verdi, c);  // bruker metoden over
     }
 
-    // 2. versjon av binærsøk - returverdier som for Programkode 1.3.6 a)
-    public static int binærsøk2(int[] a, int fra, int til, int verdi) {
+
+    public static <T> int binærsøk2(int[] a, int fra, int til, int verdi) {
         Tabell.fratilKontroll(a.length, fra, til);  // se Programkode 1.2.3 a)
         int v = fra, h = til - 1;    // v og h er intervallets endepunkter
 
@@ -212,7 +219,7 @@ public class Tabell {
     int antall = 10;                                   // antall verdier
 
 
-    public static void copy(int[] a, int antall) {
+    /*public static void copy(int[] a, int antall) {
         if (antall >= a.length) throw new IllegalStateException("Tabellen er full");
 
         int nyverdi = 10;                                  // ny verdi
@@ -225,7 +232,8 @@ public class Tabell {
         antall++;                                          // øker antallet
 
         Tabell.skrivln(a, 0, antall);  // Se Oppgave 4 og 5 i Avsnitt 1.2.2
-    }
+    }  */
+
 
     public static void skrivln(int[] a, int fra, int til) {
         for (int i = fra; i < til; i++) {
@@ -323,14 +331,13 @@ public class Tabell {
             }
         return m;
     }
-    public static <T> int maks(T[] a, Comparator<? super T> c)
-    {
+
+    public static <T> int maks(T[] a, Comparator<? super T> c) {
         return maks(a, 0, a.length, c);  // kaller metoden under
     }
 
-    public static <T> int maks(T[] a, int fra, int til, Comparator<? super T> c)
-    {
-        fratilKontroll(a.length,fra,til);
+    public static <T> int maks(T[] a, int fra, int til, Comparator<? super T> c) {
+        fratilKontroll(a.length, fra, til);
 
         if (fra == til) throw new NoSuchElementException
                 ("fra(" + fra + ") = til(" + til + ") - tomt tabellintervall!");
@@ -340,7 +347,7 @@ public class Tabell {
 
         for (int i = fra + 1; i < til; i++)   // går gjennom intervallet
         {
-            if (c.compare(a[i],maksverdi) > 0)  // bruker komparatoren
+            if (c.compare(a[i], maksverdi) > 0)  // bruker komparatoren
             {
                 maksverdi = a[i];     // største verdi oppdateres
                 m = i;                // indeks til største verdi oppdateres
@@ -397,8 +404,8 @@ public class Tabell {
         skrivln(a, 0, a.length);
     }
 
-    public static void bytt(Object[] a, int i, int j) {
-        Object temp = a[i];
+    public static <T> void bytt(T[] a, int i, int j) {
+        T temp = a[i];
         a[i] = a[j];
         a[j] = temp;
     }
@@ -428,5 +435,108 @@ public class Tabell {
 
             a[j + 1] = verdi;      // j + 1 er rett sortert plass
         }
+    }
+
+    public static <T> int min(T[] a, int fra, int til, Comparator<? super T> c) {
+        if (fra < 0 || til > a.length || fra >= til)
+            throw new IllegalArgumentException("Illegalt intervall!");
+
+        int m = fra;           // indeks til minste verdi i a[fra:til>
+        T minverdi = a[fra];   // minste verdi i a[fra:til>
+
+        for (int i = fra + 1; i < til; i++) {
+            if (c.compare(a[i], minverdi) < 0) {
+                m = i;               // indeks til minste verdi oppdateres
+                minverdi = a[m];     // minste verdi oppdateres
+            }
+        }
+
+        return m;  // posisjonen til minste verdi i a[fra:til>
+    }
+
+    public static <T> int min(T[] a, Comparator<? super T> c)  // bruker hele tabellen
+    {
+        return min(a, 0, a.length, c);     // kaller metoden over
+    }
+
+    public static <T> int parter(T[] a, int v, int h, T skilleverdi, Comparator<? super T> c) {
+        while (v <= h && c.compare(a[v], skilleverdi) < 0)
+            v++;
+        while (v <= h && c.compare(skilleverdi, a[h]) <= 0)
+            h--;
+
+        while (true) {
+            if (v < h)
+                Tabell.bytt(a, v++, h--);
+            else return v;
+            while (c.compare(a[v], skilleverdi) < 0)
+                v++;
+            while (c.compare(skilleverdi, a[h]) <= 0)
+                h--;
+        }
+    }
+
+    public static <T> int parter(T[] a, T skilleverdi, Comparator<? super T> c) {
+        return parter(a, 0, a.length - 1, skilleverdi, c);  // kaller metoden over
+    }
+
+    public static <T> int sParter(T[] a, int v, int h, int k, Comparator<? super T> c) {
+        if (v < 0 || h >= a.length || k < v || k > h) throw new
+                IllegalArgumentException("Ulovlig parameterverdi");
+
+        bytt(a, k, h);   // bytter - skilleverdien a[k] legges bakerst
+        int p = parter(a, v, h - 1, a[h], c);  // partisjonerer a[v:h-1]
+        bytt(a, p, h);   // bytter for å få skilleverdien på rett plass
+
+        return p;    // returnerer posisjonen til skilleverdien
+    }
+
+    public static <T> int sParter(T[] a, int k, Comparator<? super T> c)   // bruker hele tabellen
+    {
+        return sParter(a, 0, a.length - 1, k, c); // v = 0 og h = a.lenght-1
+    }
+
+    private static <T> void kvikksortering(T[] a, int v, int h, Comparator<? super T> c) {
+        if (v >= h) return;  // hvis v = h er a[v:h] allerede sortert
+
+        int p = sParter(a, v, h, (v + h) / 2, c);
+        kvikksortering(a, v, p - 1, c);
+        kvikksortering(a, p + 1, h, c);
+    }
+
+    public static <T> void kvikksortering(T[] a, Comparator<? super T> c) // sorterer hele tabellen
+    {
+        kvikksortering(a, 0, a.length - 1, c);
+    }
+
+    private static <T> void flett(T[] a, T[] b, int fra, int m, int til, Comparator<? super T> c)
+    {
+        int n = m - fra;   // antall elementer i a[fra:m>
+        System.arraycopy(a,fra,b,0,n); // kopierer a[fra:m> over i b[0:n>
+
+        int i = 0, j = m, k = fra;     // løkkevariabler og indekser
+
+        while (i < n && j < til)  // fletter b[0:n> og a[m:til>, legger
+            a[k++] = c.compare(b[i],a[j]) <= 0 ? b[i++] : a[j++];  // resultatet i a[fra:til>
+
+        while (i < n) a[k++] = b[i++];  // tar med resten av b[0:n>
+    }
+
+    public static <T> void flettesortering(T[] a, T[] b, int fra, int til, Comparator<? super T> c)
+    {
+        if (til - fra <= 1) return;     // a[fra:til> har maks ett element
+
+        int m = (fra + til)/2;          // midt mellom fra og til
+
+        flettesortering(a,b,fra,m,c);   // sorterer a[fra:m>
+        flettesortering(a,b,m,til,c);   // sorterer a[m:til>
+
+        flett(a,b,fra,m,til,c);         // fletter a[fra:m> og a[m:til>
+    }
+
+    public static <T> void flettesortering(T[] a, Comparator<? super T> c)
+    {
+        T[] b = Arrays.copyOf(a, a.length/2);
+        flettesortering(a,b,0,a.length,c);  // kaller metoden over
     }
 }
