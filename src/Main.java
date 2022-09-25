@@ -217,5 +217,8 @@ public class Main {
         System.out.println(Tabell.rekursivFakultet(5));
 
         System.out.println(Tabell.euklid(1, 5));
-        }
+        int [] a = {5,2,4,3,1,6,7,8,9,10};
+        Tabell.kvikksortering0(a,0,9);
+        System.out.println(Arrays.toString(a));
+    }
     }
