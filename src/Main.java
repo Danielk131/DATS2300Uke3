@@ -1,6 +1,4 @@
 import eksempelklasser.*;
-
-import java.awt.*;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -114,7 +112,7 @@ public class Main {
         // Boris Zukanovic IT
 
 
-            /*Person[] p = new Person[5];                       // en persontabell
+            Person[] p = new Person[5];                       // en persontabell
             p[0] = new Person("Kari", "Svendsen");            // Kari Svendsen
             p[1] = new Person("Boris", "Zukanovic");          // Boris Zukanovic
             p[2] = new Person("Ali", "Kahn");                 // Ali Kahn
@@ -196,41 +194,28 @@ public class Main {
         String[] st = {"Sohil","Per","Thanh","Ann","Kari","Jon"};       // String-tabell
         Comparator<String> c =  Comparator.comparing(String::length);  // etter lengde
         Tabell.innsettingssortering(st, c.thenComparing(x -> x));       // vanlig orden
-        System.out.println(Arrays.toString(s));                        // skriver ut
+        System.out.println(Arrays.toString(s));
+        // skriver ut
 
-        int[] x = {3,5,6,2,6,1,4,7,7,4};         // x-koordinater
-        int[] y = {3,6,3,5,5,2,1,4,2,4};         // y-koordinater
 
-        Point[] punkt = new Point[x.length];     // en punkttabell
-        for (int i = 0; i < punkt.length; i++)
-            punkt[i] = new Point(x[i],y[i]);
+        System.out.println( "Iterativ : " + Tabell.iterativA(10));
+        System.out.println("Rekursiv : " + Tabell.rekursivA(10));
 
-        for (Point p : punkt)
-            System.out.print("(" + p.x + "," + p.y + ") ");
-            System.out.println();                    // linjeskift
+        System.out.println("Iterativ " + Tabell.iterativTverrsum(4231));
+        System.out.println("Rekursiv " + Tabell.rekursivTverrsum(4231));
 
-        Tabell.innsettingssortering(punkt, (Comparator<? super Point>) Comparator.comparingDouble((Point p) -> p.x+ p.y).thenComparingDouble(p -> p.y));
+        System.out.println("Sifferrot " + Tabell.sifferrot(956847));
+        System.out.println("Kvadratrekursiv " +Tabell.kvadratRekursiv(5));
 
-        for (Point p : punkt)
-            System.out.print("(" + p.x + "," + p.y + ") ");
-*/
-        // Utskriften blir:
-        // (3,3) (5,6) (6,3) (2,5) (6,5) (1,2) (4,1) (7,4) (7,2) (4,4)
-        // (1,2) (2,5) (3,3) (4,1) (4,4) (5,6) (6,3) (6,5) (7,2) (7,4)
+        System.out.println("SPlitt og herks : " + Tabell.sum(1, 5));
 
-        Dato[] d = new Dato[5];           // en datotabell
-        d[0] = new Dato(24,12,2014);      // 24/12-2014
-        d[1] = new Dato(24,12,2012);      // 24/12-2012
-        d[2] = new Dato(9,12,2013);       // 9/12-2013
-        d[3] = new Dato(25,12,2012);      // 25/12-2012
-        d[4] = new Dato(10,12,2013);      // 10/12-2013
+        int[] a = {1, 2, 6, 3, 7, 9, 3};
+        System.out.println(Tabell.størsteRekursiv(a, 0, 2));
+        int iterativ = Tabell.størsteRekursiv(a, 0, 3);*/
 
-        Tabell.innsettingssortering(d, Comparator.naturalOrder());
-        for (Dato x1 : d)
-            System.out.print(x1+ " ");
+        int svar = Tabell.rekursivFakultet(5);
+        System.out.println(Tabell.rekursivFakultet(5));
 
-        // Utskrift: 24/12-2012 25/12-2012 9/12-2013 10/12-2013 24/12-2014
-
+        System.out.println(Tabell.euklid(1, 5));
+        }
     }
-    }
-
