@@ -1,4 +1,6 @@
 import eksempelklasser.*;
+import hjelpeklasser.Tabelliste;
+
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -213,12 +215,27 @@ public class Main {
         System.out.println(Tabell.størsteRekursiv(a, 0, 2));
         int iterativ = Tabell.størsteRekursiv(a, 0, 3);*/
 
-        int svar = Tabell.rekursivFakultet(5);
+       /* int svar = Tabell.rekursivFakultet(5);
         System.out.println(Tabell.rekursivFakultet(5));
 
         System.out.println(Tabell.euklid(1, 5));
         int [] a = {5,2,4,3,1,6,7,8,9,10};
         Tabell.kvikksortering0(a,0,9);
-        System.out.println(Arrays.toString(a));
+        System.out.println(Arrays.toString(a)); */
+
+        String[] s2 = {"yo", "hei", "morn", "kaaaaa"};
+        Tabelliste <String> s3 = new Tabelliste<>(s2);
+
+        System.out.println("Antall: " + s3.antall());
+        System.out.println(s3.indeksTil("hei"));
+        System.out.println(s3.inneholder("yo"));
+        System.out.println(s3.hent(3));
+        System.out.println(s3);
+        s3.fjern("yo");
+        System.out.println(s3);
+        s3.nullstill();
+        System.out.println(s3);
+
+        s3.
     }
     }
