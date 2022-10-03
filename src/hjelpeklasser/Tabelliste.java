@@ -1,11 +1,13 @@
 package hjelpeklasser;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public class Tabelliste<T> implements Liste<T> {
     private T[] a;
     private int antall;
+    private int endringer;
 
     // konstruktører og metoder kommer her
     @SuppressWarnings("unchecked")          // pga. konverteringen: Object[] -> T[]
@@ -38,6 +40,8 @@ public class Tabelliste<T> implements Liste<T> {
         return antall == 0;     // listen er tom hvis antall er 0
     }
 
+
+
     @Override
     public void nullstill() {
         if (antall > 10) {
@@ -46,23 +50,45 @@ public class Tabelliste<T> implements Liste<T> {
         for (int i = 0; i < antall; i++) {
             a[i] = null;
         }
+        endringer++;
         antall = 0;
 
     }
-
     @Override
-    public Iterator<T> iterator() {
-        return null;
+    public boolean leggInn(T verdi)  // inn bakerst
+    {
+        Objects.requireNonNull(verdi, "null er ulovlig!");
+
+        // En full tabell utvides med 50%
+        if (antall == a.length)
+        {
+            a = Arrays.copyOf(a,(3*antall)/2 + 1);
+        }
+
+        a[antall++] = verdi;   // setter inn ny verdi
+
+        endringer++;
+
+        return true;
     }
 
     @Override
-    public boolean leggInn(T verdi) {
-        return false;
-    }
+    public void leggInn(int indeks, T verdi)
+    {
+        Objects.requireNonNull(verdi, "null er ulovlig!");
 
-    @Override
-    public void leggInn(int indeks, T verdi) {
+        indeksKontroll(indeks, true);  // true: indeks = antall er lovlig
 
+        // En full tabell utvides med 50%
+        if (antall == a.length) a = Arrays.copyOf(a,(3*antall)/2 + 1);
+
+        // rydder plass til den nye verdien
+        System.arraycopy(a, indeks, a, indeks + 1, antall - indeks);
+
+        a[indeks] = verdi;     // setter inn ny verdi
+
+        antall++;
+        endringer++;
     }
 
     public T hent(int indeks) {
@@ -83,7 +109,14 @@ public class Tabelliste<T> implements Liste<T> {
 
     @Override
     public T oppdater(int indeks, T verdi) {
-        return null;
+        Objects.requireNonNull(verdi, "null er ulovlig!");
+
+        indeksKontroll(indeks, false);  // false: indeks = antall er ulovlig
+
+        T gammelverdi = a[indeks];      // tar vare på den gamle verdien
+        a[indeks] = verdi;              // oppdaterer
+        endringer++;
+        return gammelverdi;             // returnerer den gamle verdien
     }
 
     @Override
@@ -93,6 +126,7 @@ public class Tabelliste<T> implements Liste<T> {
                 antall--;
                 System.arraycopy(a, i + 1, a, i, antall - i);
                 a[antall] = null;
+                endringer++;
                 return true;
             }
         }
@@ -101,7 +135,14 @@ public class Tabelliste<T> implements Liste<T> {
 
     @Override
     public T fjern(int indeks) {
-        return null;
+        indeksKontroll(indeks, false);  // false: indeks = antall er ulovlig
+        T verdi = a[indeks];
+
+        antall--;
+        System.arraycopy(a, indeks +1,a, indeks, antall-indeks);
+        endringer++;
+
+        return verdi;
     }
 
     public String toString() {
@@ -118,24 +159,28 @@ public class Tabelliste<T> implements Liste<T> {
         return str.toString();
     }
 
+    public Iterator<T> iterator() {
+        return new TabellListeIterator();
+    }
+
     // Skal ligge som en indre klasse i class TabellListe
     private class TabellListeIterator implements Iterator<T> {
         private int denne = 0;       // instansvariabel
+        private boolean fjernOK = false;   // ny instansvariabel i TabellListeIterator
+        private int iteratorendringer=endringer;
 
         public boolean hasNext()     // sjekker om det er flere igjen
         {
             return denne < antall;     // sjekker verdien til denne
         }
 
-        public Iterator<T> iterator() {
-            return new TabellListeIterator();
-        }
 
-
-        private boolean fjernOK = false;   // ny instansvariabel i TabellListeIterator
 
         public T next()                    // ny versjon
         {
+            if(iteratorendringer!=endringer){
+                throw new ConcurrentModificationException("Listen er endret");
+            }
             if (!hasNext())
                 throw new NoSuchElementException("Tomt eller ingen verdier igjen!");
 
@@ -148,6 +193,8 @@ public class Tabelliste<T> implements Liste<T> {
 
         public void remove()         // ny versjon
         {
+            if(iteratorendringer!=endringer)
+                throw new ConcurrentModificationException("Listen er endret");
             if (!fjernOK) throw
                     new IllegalStateException("Ulovlig tilstand!");
 
@@ -160,7 +207,45 @@ public class Tabelliste<T> implements Liste<T> {
 
             System.arraycopy(a, denne + 1, a, denne, antall - denne);  // tetter igjen
             a[antall] = null;   // verdien som lå lengst til høyre nulles
+            iteratorendringer++;
+            endringer++;
+
+        }
+            public boolean fjernHvis(Predicate<? super T> p) {
+            Objects.requireNonNull(p);                       // kaster unntak
+
+            int nyttAntall = antall;
+            for (int i = 0, j = 0; j < antall; j++) {
+                if (p.test(a[j])) {  //Hvis p=a[j] så skal a[j] fjernes
+                    nyttAntall--;   //Oppdaterer lengden på¨array
+                } else
+                    a[i++] = a[j];   //Forskyver array, i oppdaterer etterpå(først a[0] så kommer i++ etter det)
+            }
+            for (int i = nyttAntall; i < antall; i++) {
+                a[i] = null;
+            }
+
+            boolean fjernet = nyttAntall < antall;
+            antall = nyttAntall;
+            if(fjernet)
+                endringer++;
+            return fjernet;
+        }
+
+            public void forEach(Consumer<? super T> action){
+            for (int i = 0; i>antall; i++){
+                action.accept(a[i]);
+            }
+        }
+
+            public void forEachRemaining(Consumer<? super T> action){
+            while (denne>antall){
+                action.accept(a[denne++]);
+            }
         }
     }
+
 }
+
+
 

@@ -1,8 +1,11 @@
 import eksempelklasser.*;
+import hjelpeklasser.EnkeltLenketListe;
+import hjelpeklasser.Liste;
 import hjelpeklasser.Tabelliste;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Iterator;
 
 public class Main {
     public static void main(String[] args) {
@@ -90,7 +93,7 @@ public class Main {
         // Informasjonsteknologi (IT)
         // Anvendt datateknologi (Anvendt)
         // Enkeltemnestudent (Enkeltemne)*/
-
+/*
         Student[] s = new Student[7];  // en Studenttabell
 
         s[0] = new Student("Kari", "Svendsen", Studium.Data);    // Kari Svendsen
@@ -153,7 +156,7 @@ public class Main {
                 return ut;
             }
         }
-
+*/
             /*Komperator.Komparator<Person> c = (Komperator.Komparator<Person>) new FornavnKomparator();   // en instans av klassen
             Tabell.innsettingssortering(p, c);                // se Programkode 1.4.6 b)
 
@@ -223,19 +226,53 @@ public class Main {
         Tabell.kvikksortering0(a,0,9);
         System.out.println(Arrays.toString(a)); */
 
-        String[] s2 = {"yo", "hei", "morn", "kaaaaa"};
+        /*String[] s2 = {"yo", "hei", "morn", "kaaaaa"};
         Tabelliste <String> s3 = new Tabelliste<>(s2);
 
         System.out.println("Antall: " + s3.antall());
         System.out.println(s3.indeksTil("hei"));
         System.out.println(s3.inneholder("yo"));
         System.out.println(s3.hent(3));
+        s3.oppdater(1, "ityf");
         System.out.println(s3);
-        s3.fjern("yo");
+        s3.fjernHvis(x -> x.equals("yo"));
         System.out.println(s3);
-        s3.nullstill();
-        System.out.println(s3);
+        s3.forEach(x-> System.out.println(x + ""));
+        */
+       /* String[] s = {"Per","Kari","Ole"};
 
+        Liste<String> liste = new Tabelliste<>();
+
+        for (String navn : s) liste.leggInn(navn);
+        System.out.println(liste);
+        // Utskrift: [Per, Kari, Ole]
+
+        Iterator<String> i = liste.iterator();     // oppretter en iterator
+        System.out.println(i.next());              // den første i listen
+
+        Iterator<String> i1 = liste.iterator();     // oppretter en iterator i
+        Iterator<String> j = liste.iterator();     // oppretter en iterator j
+
+        System.out.println(i1.next());              // den første i listen
+        i.remove();                                // fjerner den første
+        System.out.println(j.next());              // den første i listen*/
+
+        EnkeltLenketListe <Integer> liste = new EnkeltLenketListe<>();
+        liste.leggInn(3);
+        liste.leggInn(5);
+        liste.leggInn(1);
+        liste.leggInn(32);
+        System.out.println(liste.antall());
+        System.out.println(liste);
+        Integer a = 32;
+        Integer b = 3;
+        Integer c= 5;
+        Integer d = 1;
+        System.out.println(liste.fjern(a));
+        System.out.println(liste);
+        System.out.println(liste.oppdater(0, 5 ));
+        System.out.println(liste);
     }
+
 
     }
