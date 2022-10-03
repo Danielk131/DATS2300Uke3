@@ -236,6 +236,6 @@ public class Main {
         s3.nullstill();
         System.out.println(s3);
 
-        s3.
     }
+
     }
