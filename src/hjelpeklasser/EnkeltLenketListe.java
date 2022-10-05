@@ -3,6 +3,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class EnkeltLenketListe<T> implements Liste<T> {
@@ -288,6 +289,14 @@ public class EnkeltLenketListe<T> implements Liste<T> {
             antall--;                      // en node mindre i listen
         }
 
+        public void forEachRemaining(Consumer<? super T> handling) {
+            Objects.requireNonNull(handling, "handling er null!");
+            while (p != null) {
+                handling.accept(p.verdi);
+                p = p.neste;
+            }
+        }
+
         @Override
         public String toString() {
             if (antall == 0) {
@@ -339,5 +348,16 @@ public class EnkeltLenketListe<T> implements Liste<T> {
         }
         antall -= antallFjernet;
         return antallFjernet>0;
+    }
+    public void forEach(Consumer<? super T> handling)
+    {
+        Objects.requireNonNull(handling, "handling er null!");
+
+        Node<T> p = hode;
+        while (p != null)
+        {
+            handling.accept(p.verdi);
+            p = p.neste;
+        }
     }
 }
