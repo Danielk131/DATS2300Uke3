@@ -257,7 +257,7 @@ public class Main {
         i.remove();                                // fjerner den første
         System.out.println(j.next());              // den første i listen*/
 
-        EnkeltLenketListe <Integer> liste = new EnkeltLenketListe<>();
+       /* EnkeltLenketListe <Integer> liste = new EnkeltLenketListe<>();
         liste.leggInn(3);
         liste.leggInn(5);
         liste.leggInn(1);
@@ -271,7 +271,19 @@ public class Main {
         System.out.println(liste.fjern(a));
         System.out.println(liste);
         System.out.println(liste.oppdater(0, 5 ));
+        System.out.println(liste);*/
+
+        Liste<Integer> liste = new EnkeltLenketListe<>();
+        for (int i = 1; i <= 10; i++) liste.leggInn(i);
         System.out.println(liste);
+
+        // fjerner partallene
+        liste.fjernHvis(x -> x % 2 == 0);
+
+        // skriver ut
+        liste.forEach(x -> System.out.print(x + " "));
+
+
     }
 
 
