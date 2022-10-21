@@ -6,7 +6,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class EnkeltLenketListe<T> implements Liste<T> {
+public class EnkeltLenketListe<T> implements Liste<T>, Kø<T> {
     private static final class Node<T>       // en indre nodeklasse
     {
         private T verdi;                       // nodens verdi
@@ -66,6 +66,17 @@ public class EnkeltLenketListe<T> implements Liste<T> {
 
         antall++;        // en mer i listen
         return true;     // vellykket innlegging
+    }
+
+    @Override
+    public T kikk() {
+        return hode.verdi;
+    }
+
+    @Override
+    public T taUt() {
+        T ut = fjern(indeksTil(hode.verdi));
+        return ut;
     }
 
     @Override

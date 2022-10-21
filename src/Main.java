@@ -1,14 +1,12 @@
 import eksempelklasser.*;
-import hjelpeklasser.EnkeltLenketListe;
-import hjelpeklasser.Liste;
-import hjelpeklasser.Tabelliste;
+import hjelpeklasser.*;
 
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 
 public class Main {
-    public static void main(String[] args) {
+    public static <T> void main(String[] args) {
         /*int[] a = Tabell.randPerm(10);
         //Tabell.utvalgssortering(a, 0, 5);
         //for (int i = 0; i < a.length; i++) {
@@ -273,7 +271,7 @@ public class Main {
         System.out.println(liste.oppdater(0, 5 ));
         System.out.println(liste);*/
 
-        Liste<Integer> liste = new EnkeltLenketListe<>();
+       /* Liste<Integer> liste = new EnkeltLenketListe<>();
         for (int i = 1; i <= 10; i++) liste.leggInn(i);
         System.out.println(liste);
 
@@ -282,7 +280,53 @@ public class Main {
 
         // skriver ut
         liste.forEach(x -> System.out.print(x + " "));
+        */
+        /*
+        Stakk<Integer> stakk = new TabellStakk<>();
+        Kø<Integer> kø = new TabellKø<>();
+        TabellKø<Integer> l = new TabellKø<>();
+        stakk.leggInn(1);
+        stakk.leggInn(2);
+        stakk.leggInn(3);
+        l.leggInn(1);
+        l.leggInn(2);
+        l.leggInn(3);
+        kø.leggInn(1);
+        kø.leggInn(2);
+        kø.leggInn(3);
+        kø.antall();
+        l.indeksTil(1);
+        System.out.println(kø);
+        TabellKø.snu(kø);
+        System.out.println(kø);
+        kø.antall();
 
+        //Kø<Integer> kø = new EnkeltLenketListe<>();
+
+        for (int i = 1; i <= 10; i++) kø.leggInn(i);
+
+        while (!kø.tom())
+        {
+            System.out.print(kø.taUt() + " ");
+        }*/
+
+        int[] posisjon = {1, 2,3,4,5,6,7,9,11,12,13,14,18,19,24,25,38,39};
+
+        Character[] verdi = {'O', 'G','B','K','R','E','L','I','A','N', 'H',
+        'J','D', 'P', 'C', 'Q', 'M', 'F'};
+
+        BinTre<Character> tre = new BinTre<>(posisjon, verdi);  // den nye konstruktøren
+
+        System.out.println(tre.antall());
+        System.out.println(tre.hent(4));
+
+        int[]pos15 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+        Integer[]verdi15 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+
+        BinTre<Integer> femten = new BinTre<>(pos15, verdi15);
+        femten.fjern(15);
+        System.out.println(femten.hent(15));
+        System.out.println(femten.finnes(15));
 
     }
 
