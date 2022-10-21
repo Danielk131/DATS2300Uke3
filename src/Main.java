@@ -1,12 +1,15 @@
 import eksempelklasser.*;
-import hjelpeklasser.*;
+import hjelpeklasser.EnkeltLenketListe;
+import hjelpeklasser.Liste;
+import hjelpeklasser.Tabelliste;
 
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.StringJoiner;
 
 public class Main {
-    public static <T> void main(String[] args) {
+    public static void main(String[] args) {
         /*int[] a = Tabell.randPerm(10);
         //Tabell.utvalgssortering(a, 0, 5);
         //for (int i = 0; i < a.length; i++) {
@@ -269,9 +272,9 @@ public class Main {
         System.out.println(liste.fjern(a));
         System.out.println(liste);
         System.out.println(liste.oppdater(0, 5 ));
-        System.out.println(liste);*/
+        System.out.println(liste);
 
-       /* Liste<Integer> liste = new EnkeltLenketListe<>();
+        Liste<Integer> liste = new EnkeltLenketListe<>();
         for (int i = 1; i <= 10; i++) liste.leggInn(i);
         System.out.println(liste);
 
@@ -279,56 +282,55 @@ public class Main {
         liste.fjernHvis(x -> x % 2 == 0);
 
         // skriver ut
-        liste.forEach(x -> System.out.print(x + " "));
-        */
-        /*
-        Stakk<Integer> stakk = new TabellStakk<>();
-        Kø<Integer> kø = new TabellKø<>();
-        TabellKø<Integer> l = new TabellKø<>();
-        stakk.leggInn(1);
-        stakk.leggInn(2);
-        stakk.leggInn(3);
-        l.leggInn(1);
-        l.leggInn(2);
-        l.leggInn(3);
-        kø.leggInn(1);
-        kø.leggInn(2);
-        kø.leggInn(3);
-        kø.antall();
-        l.indeksTil(1);
-        System.out.println(kø);
-        TabellKø.snu(kø);
-        System.out.println(kø);
-        kø.antall();
+        liste.forEach(x -> System.out.print(x + " "));*/
 
-        //Kø<Integer> kø = new EnkeltLenketListe<>();
+        /*int[] posisjon = {1, 2, 3, 4, 5, 6, 7, 10, 11, 13, 14, 22, 23, 28, 29};  // posisjoner og
+        String[] verdi = "EIBGAHKLODNMCJF".split("");              // verdier i nivåorden
 
-        for (int i = 1; i <= 10; i++) kø.leggInn(i);
+        BinTre<String> tre = new BinTre<>(posisjon, verdi);        // en konstruktør
+        tre.nivåorden(Oppgave.konsollutskrift().deretter(c -> System.out.print(' ')));  // Utskrift: E I B G A H K L O D N M C J F
 
-        while (!kø.tom())
-        {
-            System.out.print(kø.taUt() + " ");
-        }*/
+        Liste<String> liste = new Tabelliste<>();  // en liste
+        tre.nivåorden(c -> liste.leggInn(c));          // lambda-uttrykk som argument
+        System.out.println(liste);                     // skriver ut listen
 
-        int[] posisjon = {1, 2,3,4,5,6,7,9,11,12,13,14,18,19,24,25,38,39};
 
-        Character[] verdi = {'O', 'G','B','K','R','E','L','I','A','N', 'H',
-        'J','D', 'P', 'C', 'Q', 'M', 'F'};
+        BinTre<Character> treBin = new BinTre<>();
+        int[] p = {1, 2, 3, 4, 5, 6, 7, 10, 11, 13, 14, 22, 23, 28, 29};  // posisjoner i nivåorden
+        String v = "EIBGAHKLODNMCJF";
 
-        BinTre<Character> tre = new BinTre<>(posisjon, verdi);  // den nye konstruktøren
+        for (int i = 0; i < p.length; i++) {
+            treBin.leggInn(p[i], v.charAt(i));
+        }
+        StringJoiner s = new StringJoiner(", ", "[", "]");
+        char d = 'D';
+        tre.nivåorden(c -> { if (c > d) s.add(c.toString()); } );
+        String verdier = s.toString();
+        System.out.println(verdier);
 
-        System.out.println(tre.antall());
-        System.out.println(tre.hent(4));
+        char[] d = {(char)0};  // (char)0 er minste mulige tegn
+        tre.nivåorden(c -> { if (c > d[0]) d[0] = c;});
+        System.out.println(d[0]);
 
-        int[]pos15 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
-        Integer[]verdi15 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+        //SKjønner ikke denne oppgaven spør om hjelp i øving?
 
-        BinTre<Integer> femten = new BinTre<>(pos15, verdi15);
-        femten.fjern(15);
-        System.out.println(femten.hent(15));
-        System.out.println(femten.finnes(15));
 
+
+        int[] posisjon = {1,2,3,4,5,6,7,10,11,13,14,22,23,28,29};  // nodeposisjoner
+        String[] verdi = "EIBGAHKLODNMCJF".split("");              // verdier i nivåorden
+
+        BinTre<String> tre = new BinTre<>(posisjon, verdi);        // en konstruktør
+
+        int[] nivåer = tre.nivåer();  // bruker Programkode 5.1.6 k)
+
+        System.out.print("Nivåer: " + Arrays.toString(nivåer));
+        System.out.print(" Treets bredde: " + nivåer[Tabell.maks(nivåer)]);
+        System.out.println(" Treets høyde: " + (nivåer.length - 1));
+
+        // Utskrift: Nivåer: [1, 2, 4, 4, 4] Treets bredde: 4 Treets høyde: 4
     }
 
+         */
 
-    }
+
+}

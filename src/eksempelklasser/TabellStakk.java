@@ -2,99 +2,145 @@ package eksempelklasser;
 
 import hjelpeklasser.Stakk;
 
-import java.util.Arrays;
-import java.util.NoSuchElementException;
-import java.util.StringJoiner;
+import java.util.*;
 
 public class TabellStakk<T> implements Stakk<T>
 {
-    private T[] a;                    // en generisk tabell
-    private int antall;               // antall verdier på stakken
+    private T[] a;                     // en T-tabell
+    private int antall;                // antall verdier på stakken
 
-    @SuppressWarnings("unchecked")    // konvertering: Object[] -> T[]
-    public TabellStakk(int lengde)    // valgfri tabellengde
+    public TabellStakk()               // konstruktør - tabellengde 8
     {
-        a = (T[]) new Object[lengde];   // oppretter tabellen
-        antall = 0;                     // stakken er tom
+        this(8);
     }
 
-    public TabellStakk()
+    @SuppressWarnings("unchecked")     // pga. konverteringen: Object[] -> T[]
+    public TabellStakk(int lengde)     // valgfri tabellengde
     {
-        this(8);                        // lengde lik 8
+        if (lengde < 0)
+            throw new IllegalArgumentException("Negativ tabellengde!");
+
+        a = (T[])new Object[lengde];     // oppretter tabellen
+        antall = 0;                      // stakken er tom
     }
 
-    @Override
-    public int antall()
-    {
-        return antall;
-    }
-
-    @Override
-    public boolean tom()
-    {
-        return antall == 0;
-    }
-
-    @Override
     public void leggInn(T verdi)
     {
         if (antall == a.length)
-            a = Arrays.copyOf(a,antall == 0 ? 1 : 2*antall);  // dobler
+            a = Arrays.copyOf(a, antall == 0 ? 1 : 2*antall);   // dobler
 
         a[antall++] = verdi;
     }
 
     @Override
-    public T kikk()
-    {
-        if (antall == 0) throw
-                new NoSuchElementException("Stakken er tom!");
+    public T kikk() {
+        {
+            if (antall == 0)       // sjekker om stakken er tom
+                throw new NoSuchElementException("Stakken er tom!");
 
-        return a[antall-1];
+            return a[antall-1];    // returnerer den øverste verdien
+        }
     }
 
     @Override
-    public T taUt()
-    {
-        if (antall == 0) throw
-                new NoSuchElementException("Stakken er tom!");
+    public T taUt() {
+        {
+            if (antall == 0)       // sjekker om stakken er tom
+                throw new NoSuchElementException("Stakken er tom!");
 
-        antall--;
+            antall--;             // reduserer antallet
 
-        T temp = a[antall];
-        a[antall] = null;
-        return temp;
+            T temp = a[antall];   // tar var på det øverste objektet
+            a[antall] = null;     // tilrettelegger for resirkulering
+
+            return temp;          // returnerer den øverste verdien
+        }
     }
 
     @Override
-    public void nullstill()
-    {
-        for (int i = 0; i < antall; i++) a[i] = null;
-        antall = 0;
+    public int antall() {
+        return antall;
     }
 
     @Override
-    public String toString()   // bruker StringJoiner
-    {
-        StringJoiner s = new StringJoiner(", ", "[", "]");
-        for (int i = antall - 1; i >= 0; i--)
-            s.add(a[i] == null ? "null" : a[i].toString());
-        return s.toString();
+    public boolean tom() {
+       return antall==0;
     }
 
-    public String toString2()  // bruker StringBuilder
-    {
-        if (tom()) return "[]";
+    @Override
+    public void nullstill() {
+        for(int i =0; i<antall; i++){
+            a[i]=null;
+        }
+            antall=0;
+    }
 
+    public String toString(){
         StringBuilder s = new StringBuilder();
-        s.append('[');
-        s.append(a[antall-1]);
-
-        for (int i = antall - 2; i >= 0; i--)
-            s.append(',').append(' ').append(a[i]);
-
-        s.append(']');
+        if(tom()){
+            return "[]";
+        }
+        s.append("[" +a[antall-1]);
+        for (int i=antall-2; i>=0; i--) {
+            if (a[i] != null) {
+                s.append(" " +a[i]);
+            }
+        }
+        s.append("]");
         return s.toString();
     }
 
-} // class TabellStakk
+    public static <T> void snu(Stakk<T> A) {
+        int  n =A.antall()-1;
+        Stakk<T> s1 = new TabellStakk<>();
+
+
+        while (n>0) {
+            T temp = A.taUt();
+            for (int i = 0; i < n; i++) {
+                s1.leggInn(A.taUt());
+            }
+                A.leggInn(temp);
+                while (!s1.tom()) {
+                    A.leggInn(s1.taUt());
+                }
+            n--;
+            }
+
+        }
+
+
+    public static <T> void kopier(Stakk<T> A, Stakk<T> B){
+        T temp;
+        int n = A.antall();
+            while (n > 0) {
+                B.leggInn(A.taUt());
+                temp = B.kikk();
+                for (int i = 0; i > n; i++) {
+                    A.leggInn(B.taUt());
+                    B.leggInn(temp);
+                }
+                n--;
+            }
+        }
+
+    public static <T> void sorter(Stakk<T> A, Comparator<? super T> c){
+            Stakk<T> B = new TabellStakk<T>();
+            T temp;
+            int n = 0;
+
+            while (!A.tom())
+            {
+                temp = A.taUt();
+                n = 0;
+                while (!B.tom() && c.compare(temp,B.kikk()) < 0)
+                {
+                    n++; A.leggInn(B.taUt());
+                }
+                B.leggInn(temp);
+                for (int i = 0; i < n; i++) B.leggInn(A.taUt());
+            }
+
+            while (!B.tom()) A.leggInn(B.taUt());
+        }
+}  // class TabellStakk
