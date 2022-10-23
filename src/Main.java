@@ -330,7 +330,43 @@ public class Main {
         // Utskrift: Nivåer: [1, 2, 4, 4, 4] Treets bredde: 4 Treets høyde: 4
     }
 
-         */
+
+        int[] posisjon = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};             // posisjoner og
+        String[] verdi = "ABCDEFGHIJ".split("");             // verdier i nivåorden
+
+        BinTre<String> tre = new BinTre<>(posisjon, verdi);  // konstruktør
+
+        for (String s : tre) System.out.print(s + " ");      // for-alle-løkke
+        // Utskrift: H D I B J E A F C G
+        System.out.println("");
+        tre.forEach(s->{
+            if(!s.matches("F"))
+                System.out.print(s + " ");
+        else throw new NullPointerException("Ferdig") ;}
+        );
+        System.out.println("");
+        tre.iterator().forEachRemaining(s -> System.out.print(s + " "));
 
 
+        char c = 'F';
+
+        for (Iterator<Character> i = tre.iterator(); i.hasNext(); )
+        {
+            if (i.next() == c)
+            {
+                System.out.println("Fant " + c + "!" );
+                break;
+            }
+        }
+*/
+        int[] posisjon = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};             // posisjoner og
+        String[] verdi = "ABCDEFGHIJ".split("");             // verdier i nivåorden
+
+        BinTre<String> tre = new BinTre<>(posisjon, verdi);  // konstruktør
+        System.out.println(tre.antall2());
+        System.out.println(tre.inneholder("A"));
+        System.out.println(tre.inneholder("Å"));
+        System.out.println(tre.posisjon("H"));
+
+    }
 }
