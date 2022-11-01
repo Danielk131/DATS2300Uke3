@@ -1,5 +1,7 @@
 package eksempelklasser;
 
+import hjelpeklasser.Liste;
+import hjelpeklasser.SBinTre;
 import hjelpeklasser.Stakk;
 
 import java.util.*;
