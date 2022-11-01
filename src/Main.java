@@ -1,6 +1,12 @@
 import eksempelklasser.*;
+import hjelpeklasser.EnkeltLenketListe;
+import hjelpeklasser.Liste;
+import hjelpeklasser.Tabelliste;
+
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.StringJoiner;
 
 public class Main {
     public static void main(String[] args) {
@@ -88,7 +94,7 @@ public class Main {
         // Informasjonsteknologi (IT)
         // Anvendt datateknologi (Anvendt)
         // Enkeltemnestudent (Enkeltemne)*/
-
+/*
         Student[] s = new Student[7];  // en Studenttabell
 
         s[0] = new Student("Kari", "Svendsen", Studium.Data);    // Kari Svendsen
@@ -151,7 +157,7 @@ public class Main {
                 return ut;
             }
         }
-
+*/
             /*Komperator.Komparator<Person> c = (Komperator.Komparator<Person>) new FornavnKomparator();   // en instans av klassen
             Tabell.innsettingssortering(p, c);                // se Programkode 1.4.6 b)
 
@@ -213,9 +219,154 @@ public class Main {
         System.out.println(Tabell.størsteRekursiv(a, 0, 2));
         int iterativ = Tabell.størsteRekursiv(a, 0, 3);*/
 
-        int svar = Tabell.rekursivFakultet(5);
+       /* int svar = Tabell.rekursivFakultet(5);
         System.out.println(Tabell.rekursivFakultet(5));
 
         System.out.println(Tabell.euklid(1, 5));
+        int [] a = {5,2,4,3,1,6,7,8,9,10};
+        Tabell.kvikksortering0(a,0,9);
+        System.out.println(Arrays.toString(a)); */
+
+        /*String[] s2 = {"yo", "hei", "morn", "kaaaaa"};
+        Tabelliste <String> s3 = new Tabelliste<>(s2);
+
+        System.out.println("Antall: " + s3.antall());
+        System.out.println(s3.indeksTil("hei"));
+        System.out.println(s3.inneholder("yo"));
+        System.out.println(s3.hent(3));
+        s3.oppdater(1, "ityf");
+        System.out.println(s3);
+        s3.fjernHvis(x -> x.equals("yo"));
+        System.out.println(s3);
+        s3.forEach(x-> System.out.println(x + ""));
+        */
+       /* String[] s = {"Per","Kari","Ole"};
+
+        Liste<String> liste = new Tabelliste<>();
+
+        for (String navn : s) liste.leggInn(navn);
+        System.out.println(liste);
+        // Utskrift: [Per, Kari, Ole]
+
+        Iterator<String> i = liste.iterator();     // oppretter en iterator
+        System.out.println(i.next());              // den første i listen
+
+        Iterator<String> i1 = liste.iterator();     // oppretter en iterator i
+        Iterator<String> j = liste.iterator();     // oppretter en iterator j
+
+        System.out.println(i1.next());              // den første i listen
+        i.remove();                                // fjerner den første
+        System.out.println(j.next());              // den første i listen*/
+
+       /* EnkeltLenketListe <Integer> liste = new EnkeltLenketListe<>();
+        liste.leggInn(3);
+        liste.leggInn(5);
+        liste.leggInn(1);
+        liste.leggInn(32);
+        System.out.println(liste.antall());
+        System.out.println(liste);
+        Integer a = 32;
+        Integer b = 3;
+        Integer c= 5;
+        Integer d = 1;
+        System.out.println(liste.fjern(a));
+        System.out.println(liste);
+        System.out.println(liste.oppdater(0, 5 ));
+        System.out.println(liste);
+
+        Liste<Integer> liste = new EnkeltLenketListe<>();
+        for (int i = 1; i <= 10; i++) liste.leggInn(i);
+        System.out.println(liste);
+
+        // fjerner partallene
+        liste.fjernHvis(x -> x % 2 == 0);
+
+        // skriver ut
+        liste.forEach(x -> System.out.print(x + " "));*/
+
+        /*int[] posisjon = {1, 2, 3, 4, 5, 6, 7, 10, 11, 13, 14, 22, 23, 28, 29};  // posisjoner og
+        String[] verdi = "EIBGAHKLODNMCJF".split("");              // verdier i nivåorden
+
+        BinTre<String> tre = new BinTre<>(posisjon, verdi);        // en konstruktør
+        tre.nivåorden(Oppgave.konsollutskrift().deretter(c -> System.out.print(' ')));  // Utskrift: E I B G A H K L O D N M C J F
+
+        Liste<String> liste = new Tabelliste<>();  // en liste
+        tre.nivåorden(c -> liste.leggInn(c));          // lambda-uttrykk som argument
+        System.out.println(liste);                     // skriver ut listen
+
+
+        BinTre<Character> treBin = new BinTre<>();
+        int[] p = {1, 2, 3, 4, 5, 6, 7, 10, 11, 13, 14, 22, 23, 28, 29};  // posisjoner i nivåorden
+        String v = "EIBGAHKLODNMCJF";
+
+        for (int i = 0; i < p.length; i++) {
+            treBin.leggInn(p[i], v.charAt(i));
         }
+        StringJoiner s = new StringJoiner(", ", "[", "]");
+        char d = 'D';
+        tre.nivåorden(c -> { if (c > d) s.add(c.toString()); } );
+        String verdier = s.toString();
+        System.out.println(verdier);
+
+        char[] d = {(char)0};  // (char)0 er minste mulige tegn
+        tre.nivåorden(c -> { if (c > d[0]) d[0] = c;});
+        System.out.println(d[0]);
+
+        //SKjønner ikke denne oppgaven spør om hjelp i øving?
+
+
+
+        int[] posisjon = {1,2,3,4,5,6,7,10,11,13,14,22,23,28,29};  // nodeposisjoner
+        String[] verdi = "EIBGAHKLODNMCJF".split("");              // verdier i nivåorden
+
+        BinTre<String> tre = new BinTre<>(posisjon, verdi);        // en konstruktør
+
+        int[] nivåer = tre.nivåer();  // bruker Programkode 5.1.6 k)
+
+        System.out.print("Nivåer: " + Arrays.toString(nivåer));
+        System.out.print(" Treets bredde: " + nivåer[Tabell.maks(nivåer)]);
+        System.out.println(" Treets høyde: " + (nivåer.length - 1));
+
+        // Utskrift: Nivåer: [1, 2, 4, 4, 4] Treets bredde: 4 Treets høyde: 4
     }
+
+
+        int[] posisjon = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};             // posisjoner og
+        String[] verdi = "ABCDEFGHIJ".split("");             // verdier i nivåorden
+
+        BinTre<String> tre = new BinTre<>(posisjon, verdi);  // konstruktør
+
+        for (String s : tre) System.out.print(s + " ");      // for-alle-løkke
+        // Utskrift: H D I B J E A F C G
+        System.out.println("");
+        tre.forEach(s->{
+            if(!s.matches("F"))
+                System.out.print(s + " ");
+        else throw new NullPointerException("Ferdig") ;}
+        );
+        System.out.println("");
+        tre.iterator().forEachRemaining(s -> System.out.print(s + " "));
+
+
+        char c = 'F';
+
+        for (Iterator<Character> i = tre.iterator(); i.hasNext(); )
+        {
+            if (i.next() == c)
+            {
+                System.out.println("Fant " + c + "!" );
+                break;
+            }
+        }
+*/
+        int[] posisjon = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};             // posisjoner og
+        String[] verdi = "ABCDEFGHIJ".split("");             // verdier i nivåorden
+
+        BinTre<String> tre = new BinTre<>(posisjon, verdi);  // konstruktør
+        System.out.println(tre.antall2());
+        System.out.println(tre.inneholder("A"));
+        System.out.println(tre.inneholder("Å"));
+        System.out.println(tre.posisjon("H"));
+
+    }
+}
