@@ -285,4 +285,26 @@ public class SBinTre<T> // implements Beholder<T>
 }
 
 
-}// class SBinTre
+public T mindre(T verdi){
+        if(tom()){
+            throw new NoSuchElementException("TOmt");
+        }
+        Node<T> p = rot; Node<T> q =null;
+        int cmp = comp.compare(p.verdi, verdi);
+        while (p!=null){
+            if(cmp<0){
+                if(comp.compare(p.verdi, q.verdi)>0||q==null) {
+                    q = p;
+                }
+                p=p.venstre;
+            }
+            else {
+                p=p.høyre;
+            }
+        }
+        return q.verdi;
+    }
+}
+
+
+// class SBinTre
