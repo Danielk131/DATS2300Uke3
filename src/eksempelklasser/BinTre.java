@@ -4,10 +4,7 @@ import hjelpeklasser.IntObject;
 import hjelpeklasser.Kø;
 import hjelpeklasser.Stakk;
 
-import java.util.Arrays;
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 public class BinTre<T> implements Iterable<T>          // et generisk binærtre
 {
@@ -499,6 +496,26 @@ public class BinTre<T> implements Iterable<T>          // et generisk binærtre
         if (pos > o.get()) o.set(pos);
         if (p.venstre != null) makspos(p.venstre, 2*pos, o);
         if (p.høyre != null) makspos(p.høyre, 2*pos + 1, o);
+    }
+    public String minimumsGrenen(Comparator<? super T> c)
+    {
+        StringJoiner s = new StringJoiner(", ", "[", "]");
+
+        Node<T> p = rot;
+        while (p != null)
+        {
+            s.add(p.verdi.toString());
+            if (p.høyre == null)
+                p = p.venstre;       // har ikke høyre barn
+            else if (p.venstre == null)
+                p = p.høyre;        // har ikke venstre barn
+            else
+            {
+                int cmp = c.compare(p.venstre.verdi, p.høyre.verdi);
+                p = cmp <= 0 ? p.venstre : p.høyre;
+            }
+        }
+        return s.toString();
     }
 
 
