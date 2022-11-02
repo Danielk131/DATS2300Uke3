@@ -500,6 +500,9 @@ public class BinTre<T> implements Iterable<T>          // et generisk binærtre
         if (p.venstre != null) makspos(p.venstre, 2*pos, o);
         if (p.høyre != null) makspos(p.høyre, 2*pos + 1, o);
     }
+
+
+
     }
 
 

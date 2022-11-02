@@ -1,5 +1,7 @@
 import hjelpeklasser.SBinTre;
 
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.stream.Stream;
 
 public class Main {
@@ -403,5 +405,15 @@ public class Main {
         Integer[] x = {10, 5, 20, 10, 3, 8, 13, 18, 7, 5, 6, 12, 4, 9, 11, 10, 22};
         SBinTre<Integer> treF = SBinTre.sbintre(Stream.of(x));
         System.out.println(treF);*/
+
+
+        Integer[] a = {2,8,6,1,7,4,3,9,5,10};                  // verdier
+        SBinTre<Integer> tre = SBinTre.sbintre(Stream.of(a));  // Programkode 5.2.3 c)
+        System.out.println(tre);
+
+        Iterator<Integer> i = tre.iterator();      // en iterator er opprettet
+
+        tre.nullstill();  // en innlegging er en endring
+        i.next();        // kaster en ConcurrentModificationException
     }
 }
