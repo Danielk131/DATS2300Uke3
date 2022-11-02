@@ -97,7 +97,7 @@ public class SBinTre<T> implements Beholder<T> {
         else if (cmp < 0) q.venstre = p;         // venstre barn til q
         else q.høyre = p;                        // høyre barn til q
 
-        endringer++;
+        //endringer++;
         antall++;                                // én verdi mer i treet
         return true;                             // vellykket innlegging
     }
@@ -408,11 +408,6 @@ public class SBinTre<T> implements Beholder<T> {
         endringer++;
     }
 
-    @Override
-    public Iterator<T> iterator() {
-        return null;
-    }
-
     public Iterator<T> riterator()
     {
         return new OmvendtInordenIterator();
@@ -460,10 +455,16 @@ public class SBinTre<T> implements Beholder<T> {
         return new InordenIterator(verdi);
     }
 
+    public Iterator<T> iterator()  // returnerer en iterator
+    {
+        return new InordenIterator();
+    }
+
 
     private class InordenIterator implements Iterator<T> {
         private Stakk<Node<T>> s = new TabellStakk<>();
         private Node<T> p = null;
+        private Node<T> q = null;
         private int iteratorendringer;
 
         private Node<T> først(Node<T> q)   // en hjelpemetode
@@ -475,6 +476,13 @@ public class SBinTre<T> implements Beholder<T> {
             }
             return q;                        // q er lengst ned til venstre
         }
+
+        private InordenIterator()          // konstruktør
+        {
+            if (tom()) return;               // treet er tomt
+            p = først(rot);                  // bruker hjelpemetoden
+        }
+
 
         public InordenIterator(T verdi)    // konstruktør
         {
@@ -501,26 +509,99 @@ public class SBinTre<T> implements Beholder<T> {
         }
 
 
-        @Override
+
         public T next() {
-            if (endringer != iteratorendringer) {
+            if (iteratorendringer != endringer)
                 throw new ConcurrentModificationException();
-            }
-            if (!hasNext()) throw new NoSuchElementException("Ingen verdier!");
 
-            T verdi = p.verdi;                        // tar vare på verdien
+            if (!hasNext()) throw new NoSuchElementException();
 
-            if (p.høyre != null) p = først(p.høyre);  // p har høyre subtre
-            else if (s.tom()) p = null;               // stakken er tom
-            else p = s.taUt();                        // tar fra stakken
+            T verdi = p.verdi;               // tar vare på verdien i noden p
+            q = p;                           // q oppdateres før p flyttes
 
-            return verdi;                             // returnerer verdien
+
+            if (p.venstre != null) p = sist(p.venstre);  // p har høyre subtre
+            else if (!s.tom()) p = s.taUt();             // p har ikke høyre subtre
+            else p = null;                               // stakken er tom
+
+            return verdi;                    // returnerer verdien
         }
 
         @Override
         public boolean hasNext() {
             return p != null;
         }
+        private Node<T> sist(Node<T> q)    // en hjelpemetode
+        {
+            while (q.høyre != null)          // starter i q
+            {
+                s.leggInn(q);                  // legger q på stakken
+                q = q.høyre;                 // går videre mot høyre
+            }
+            return q;                        // q er lengst ned til høyre
+        }
+
+        public void remove()
+        {
+            if (q == null) throw new IllegalStateException("Fjerning er ulovlig!");
+
+            if (iteratorendringer != endringer)
+                throw new ConcurrentModificationException("Treet er endret!");
+
+            if (q.høyre == null)                     // Tilfelle 1)
+            {
+                if (p == null)                         // Tilfelle 1a)
+                {
+                    if (q == rot)                        // q er lik roten
+                    {
+                        rot = q.venstre;                   // q fjernes
+                    }
+                    else
+                    {
+                        Node<T> f = rot;                   // starter i roten
+                        while (f.høyre != q) f = f.høyre;  // går mot høyre
+                        f.høyre = q.venstre;               // q fjernes
+                    }
+                }
+                else // p != null                      // Tilfelle 1b)
+                {
+                    if (q == p.venstre)                  // p.venstre har ikke høyre subtre
+                    {
+                        p.venstre = q.venstre;             // q fjernes
+                    }
+                    else
+                    {
+                        Node<T> f = p.venstre;             // starter i p.venstre
+                        while (f.høyre != q) f = f.høyre;  // går mot høyre
+                        f.høyre = q.venstre;               // q fjernes
+                    }
+                }
+            }
+            else // q.høyre != null                  Tilfelle 2)
+            {
+                q.verdi = p.verdi;                     // kopierer
+
+                if (q.høyre == p)                      // q.høyre har ikke venstre barn
+                {
+                    q.høyre = p.høyre;                   // fjerner p
+                }
+                else                                   // q.høyre har venstre barn
+                {
+                    Node<T> f = s.taUt();                // forelder f til p ligger på stakken
+                    f.venstre = p.høyre;                 // fjerner p
+                    while (f != q.høyre) f = s.taUt();   // fjerner fra stakken
+                }
+
+                p = q;                                 // setter p tilbake til q
+            }
+
+            q = null;                // q settes til null
+            iteratorendringer++;     // en endring i treet via iteratoren
+            endringer++;             // en endring i treet
+            antall--;                // en verdi mindre i treet
+
+        } // remove()
+
     }
 
     private class OmvendtInordenIterator implements Iterator<T> {
@@ -589,9 +670,66 @@ public class SBinTre<T> implements Beholder<T> {
             return p != null;
         }
 
-        public void remove() {
-            throw new UnsupportedOperationException();
-        }
+        public void remove()
+        {
+            if (q == null) throw new IllegalStateException("Fjerning er ulovlig!");
+
+            if (iteratorendringer != endringer)
+                throw new ConcurrentModificationException("Treet er endret!");
+
+            if (q.høyre == null)                     // Tilfelle 1)
+            {
+                if (p == null)                         // Tilfelle 1a)
+                {
+                    if (q == rot)                        // q er lik roten
+                    {
+                        rot = q.venstre;                   // q fjernes
+                    }
+                    else
+                    {
+                        Node<T> f = rot;                   // starter i roten
+                        while (f.høyre != q) f = f.høyre;  // går mot høyre
+                        f.høyre = q.venstre;               // q fjernes
+                    }
+                }
+                else // p != null                      // Tilfelle 1b)
+                {
+                    if (q == p.venstre)                  // p.venstre har ikke høyre subtre
+                    {
+                        p.venstre = q.venstre;             // q fjernes
+                    }
+                    else
+                    {
+                        Node<T> f = p.venstre;             // starter i p.venstre
+                        while (f.høyre != q) f = f.høyre;  // går mot høyre
+                        f.høyre = q.venstre;               // q fjernes
+                    }
+                }
+            }
+            else // q.høyre != null                  Tilfelle 2)
+            {
+                q.verdi = p.verdi;                     // kopierer
+
+                if (q.høyre == p)                      // q.høyre har ikke venstre barn
+                {
+                    q.høyre = p.høyre;                   // fjerner p
+                }
+                else                                   // q.høyre har venstre barn
+                {
+                    Node<T> f = s.taUt();                // forelder f til p ligger på stakken
+                    f.venstre = p.høyre;                 // fjerner p
+                    while (f != q.høyre) f = s.taUt();   // fjerner fra stakken
+                }
+
+                p = q;                                 // setter p tilbake til q
+            }
+
+            q = null;                // q settes til null
+            iteratorendringer++;     // en endring i treet via iteratoren
+            endringer++;             // en endring i treet
+            antall--;                // en verdi mindre i treet
+
+        } // remove()
 
     } // OmvendtInordenIterator
 }

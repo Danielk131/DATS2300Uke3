@@ -407,13 +407,25 @@ public class Main {
         System.out.println(treF);*/
 
 
-        Integer[] a = {2,8,6,1,7,4,3,9,5,10};                  // verdier
-        SBinTre<Integer> tre = SBinTre.sbintre(Stream.of(a));  // Programkode 5.2.3 c)
-        System.out.println(tre);
+        Integer[] a = {4,8,3,1,7,4,9,1,6,10,2,1,5,10,7,8};     // duplikater
+        SBinTre<Integer> tre = SBinTre.sbintre(Stream.of(a));  // lager treet
 
-        Iterator<Integer> i = tre.iterator();      // en iterator er opprettet
+        System.out.println(tre);                               // skriver
 
-        tre.nullstill();  // en innlegging er en endring
-        i.next();        // kaster en ConcurrentModificationException
+        Iterator<Integer> i = tre.iterator();                  // en iterator
+        int verdi = i.next();                                  // første verdi
+
+        while (i.hasNext())                                    // traverserer
+        {
+            int nesteverdi = i.next();                           // neste verdi
+            if (verdi == nesteverdi) i.remove();                 // fjerner
+            verdi = nesteverdi;                                  // oppdaterer
+        }
+
+        System.out.println(tre);                               // skriver ut
+
+        // Utskrift:
+        // [1, 1, 1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 8, 9, 10, 10]
+        // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     }
 }
