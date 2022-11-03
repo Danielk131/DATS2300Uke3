@@ -1,5 +1,7 @@
 import hjelpeklasser.SBinTre;
 
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.stream.Stream;
 
 public class Main {
@@ -403,5 +405,27 @@ public class Main {
         Integer[] x = {10, 5, 20, 10, 3, 8, 13, 18, 7, 5, 6, 12, 4, 9, 11, 10, 22};
         SBinTre<Integer> treF = SBinTre.sbintre(Stream.of(x));
         System.out.println(treF);*/
+
+
+        Integer[] a = {4,8,3,1,7,4,9,1,6,10,2,1,5,10,7,8};     // duplikater
+        SBinTre<Integer> tre = SBinTre.sbintre(Stream.of(a));  // lager treet
+
+        System.out.println(tre);                               // skriver
+
+        Iterator<Integer> i = tre.iterator();                  // en iterator
+        int verdi = i.next();                                  // første verdi
+
+        while (i.hasNext())                                    // traverserer
+        {
+            int nesteverdi = i.next();                           // neste verdi
+            if (verdi == nesteverdi) i.remove();                 // fjerner
+            verdi = nesteverdi;                                  // oppdaterer
+        }
+
+        System.out.println(tre);                               // skriver ut
+
+        // Utskrift:
+        // [1, 1, 1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 8, 9, 10, 10]
+        // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     }
 }
