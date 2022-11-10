@@ -1,5 +1,10 @@
+import eksempelklasser.HashFunksjoner;
+import hjelpeklasser.HeapPrioritetsKø;
+import hjelpeklasser.LenketHashTabell;
+import hjelpeklasser.PrioritetsKø;
 import hjelpeklasser.SBinTre;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.stream.Stream;
@@ -404,7 +409,7 @@ public class Main {
 
         Integer[] x = {10, 5, 20, 10, 3, 8, 13, 18, 7, 5, 6, 12, 4, 9, 11, 10, 22};
         SBinTre<Integer> treF = SBinTre.sbintre(Stream.of(x));
-        System.out.println(treF);*/
+        System.out.println(treF);
 
 
         Integer[] a = {4,8,3,1,7,4,9,1,6,10,2,1,5,10,7,8};     // duplikater
@@ -427,5 +432,55 @@ public class Main {
         // Utskrift:
         // [1, 1, 1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 8, 9, 10, 10]
         // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+        int n = 1;                           // velg n >= 0
+        int[] a = {3,5,4,10,5,8,18,12,17,11,10,14,9};         // en permutasjon av tallene fra 1 til n
+
+        PrioritetsKø<Integer> kø = HeapPrioritetsKø.naturligOrden();
+        for (int k: a) kø.leggInn(k);         // ett og ett tall inn i køen
+
+        System.out.println(kø);
+        kø.taUt();
+        System.out.println(kø);
+        kø.taUt();
+        System.out.println(kø);
+        // Utskrift: 1 2 3 4 5 6 7 8 9 10
+        int n= 197;
+        int [] hash = new int[n];
+        int [] hash2 = new int[n];
+        for (int i =0; i<400; i++) {
+            String s = "A";
+            if (i < 100) {
+                s += 0;
+            }
+            if (i < 10) {
+            s += 0;
+        }
+            s+=i;
+
+            hash[HashFunksjoner.hash(s) % n]++;
+        }
+        int m = Tabell.maks(hash);
+        int maks = hash[m];
+
+        int[] frekvens = new int[6];
+        for (int i = 0; i < hash.length; i++) {
+            frekvens[hash[i]]++;
+        }
+
+
+
+        System.out.println(Arrays.toString(frekvens));
+        System.out.println(HashFunksjoner.hash("A399"));*/
+
+        String[] navn = {"Olga","Basir","Ali","Per","Elin","Siri",
+                "Ole","Mette","Anne","Åse","Leif","Mona","Lise"};
+
+        LenketHashTabell<String> hashtabell = new LenketHashTabell<>();
+
+        for (String n : navn) hashtabell.leggInn(n);
+
+        System.out.println(hashtabell);
+        // [Elin, Basir, Leif, Ole, Olga, Per, Mette, Mona, Anne, Ali, Lise, Åse, Siri]
     }
 }
