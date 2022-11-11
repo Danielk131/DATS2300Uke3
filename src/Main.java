@@ -1,16 +1,16 @@
 import eksempelklasser.HashFunksjoner;
-import hjelpeklasser.HeapPrioritetsKø;
-import hjelpeklasser.LenketHashTabell;
-import hjelpeklasser.PrioritetsKø;
-import hjelpeklasser.SBinTre;
+import hjelpeklasser.*;
+import org.w3c.dom.Node;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.StringJoiner;
 import java.util.stream.Stream;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         /*int[] a = Tabell.randPerm(10);
         //Tabell.utvalgssortering(a, 0, 5);
         //for (int i = 0; i < a.length; i++) {
@@ -471,7 +471,7 @@ public class Main {
 
 
         System.out.println(Arrays.toString(frekvens));
-        System.out.println(HashFunksjoner.hash("A399"));*/
+        System.out.println(HashFunksjoner.hash("A399"));
 
         String[] navn = {"Olga","Basir","Ali","Per","Elin","Siri",
                 "Ole","Mette","Anne","Åse","Leif","Mona","Lise"};
@@ -481,6 +481,68 @@ public class Main {
         for (String n : navn) hashtabell.leggInn(n);
 
         System.out.println(hashtabell);
-        // [Elin, Basir, Leif, Ole, Olga, Per, Mette, Mona, Anne, Ali, Lise, Åse, Siri]
+        System.out.println(hashtabell.fjern("Olga"));
+        hashtabell.nullstill();
+        System.out.println(hashtabell);
+
+        String url = "https://www.cs.hioa.no/~ulfu/appolonius/kap11/1/graf2.txt";
+        Graf graf = new Graf(url);
+
+        for (String node : graf)  // bruker iteratoren i grafen
+        {
+            System.out.println(node + " -> " + graf.kanterFra(node));
+        }
+
+        // A -> [B, C, D]
+        // B -> [A, D, E]
+        // osv
+
+        Graf graf = new Graf();
+        for (char c = 'A'; c <= 'Z'; c++) graf.leggInnNode(String.valueOf(c));
+
+        for(char c ='A'; c<'Z'; c++){
+            String fra = String.valueOf(c);
+            String til = String.valueOf((char) (c+1));
+            graf.leggInnKant(fra, til);
+            graf.leggInnKant(til, fra);
+        }
+
+        graf.leggInnKant("A", "Z");
+        graf.leggInnKant("Z", "A");
+
+        for(String node: graf){
+            System.out.println(node+"->" + graf.kanterFra(node));
+        }
+
+        System.out.println(graf.erIsolert("M"));
+        System.out.println(graf.erKant("A","C" ));
+        System.out.println(graf.grad("A"));
+        System.out.println(graf.kantTabellFra("A").toString());
+
+        MGraf graf = new MGraf(0);  // starter med tomme tabeller
+        String[] navn = "ABEGFCD".split("");  // usortert rekkefølge
+        for (String n : navn) graf.leggInnNode(n);  // legger inn
+        System.out.println(Arrays.toString(graf.nodenavn()));  // [A, B, C, D, E, F, G]
+
+        String url = "https://www.cs.hioa.no/~ulfu/appolonius/kap11/1/graf2.txt";
+        Graf graf = new Graf(url);
+        graf.dybdeFørstPretraversering("A", x -> System.out.print(x + " "));
+        // Utskrift: A B D E G F C
+
+        String url = "https://www.cs.hioa.no/~ulfu/appolonius/kap11/1/graf4.txt";
+        Graf graf = new Graf(url);
+        StringJoiner sj = new StringJoiner(", ", "[", "]");
+        graf.breddeFørstTraversering("A", sj::add);
+        System.out.println(sj.toString());  // Utskrift: [A, B, C, D, E, F, G]
+*/
+        String url = "https://www.cs.hioa.no/~ulfu/appolonius/kap11/1/graf6.txt";
+        Graf graf = new Graf(url);
+
+        graf.kortestVeiFra("A");               // fra A til O
+
+        for (String g : graf) {
+            System.out.println(graf.veiTil(g));  // Utskrift: [A, D, G, K, O]
+
+        }
     }
 }

@@ -115,19 +115,68 @@ public class LenketHashTabell<T> implements Beholder<T>
     @Override
     public boolean inneholder(T verdi)
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        int hashverdi=verdi.hashCode() & 0x7fffffff;
+        int indeks = hashverdi%hash.length;
+        Node<T> p = hash[indeks];
+
+        while(p!=null){
+            if(verdi.equals(p.verdi)) {
+                return true;
+            }
+                p = p.neste;
+            }
+        return false;
     }
 
     @Override
     public boolean fjern(T verdi)
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        int hashverdi=verdi.hashCode() & 0x7fffffff;
+        int indeks = hashverdi%hash.length;
+        Node<T> p = hash[indeks];
+        Node<T> q = null;
+
+        while(p!=null){
+            if(verdi.equals(p.verdi)) {
+               break;
+            }
+            q=p;
+            p = p.neste;
+        }
+        if(p==null){
+            return false;
+        }
+        else {
+            if(p == hash[indeks]){
+                hash[indeks] = p.neste;            // verdi ligger først
+            }
+            else {
+                q.neste = p.neste;
+            }
+        }
+       antall--;
+        return true;
     }
 
     @Override
     public void nullstill()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if(antall==0){
+            throw new IndexOutOfBoundsException("Listen er tom allerede");
+        }
+        Node<T> p = hash[0];
+        Node<T> q =null;
+        for(int i=0; i<hash.length; i++){
+            p=hash[i];
+            while(p!=null){
+                hash[i]=p.neste;
+                p=p.neste;
+            }
+
+
+
+        }
+        antall=0;
     }
 
     @Override
